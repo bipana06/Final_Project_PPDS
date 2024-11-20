@@ -4,3 +4,6 @@ pandas
 fastapi
 uvicorn
 certifi
+beautifulsoup4
+requests
+selenium

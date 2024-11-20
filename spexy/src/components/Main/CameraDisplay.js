@@ -1,3 +1,8 @@
+<<<<<<< Updated upstream
+=======
+// src/components/Main/CameraDisplay.js
+
+>>>>>>> Stashed changes
 import React, { useState, useRef, useEffect } from 'react';
 import { InferenceEngine } from "inferencejs";
 
@@ -5,6 +10,7 @@ import { InferenceEngine } from "inferencejs";
 function CameraDisplay({ setApiResponse, apiKey }) {
     const [isCameraOn, setIsCameraOn] = useState(true);
     const [capturedImage, setCapturedImage] = useState(null);
+    const [hoveredButton, setHoveredButton] = useState(null); // Track hovered button
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
 
@@ -104,7 +110,7 @@ function CameraDisplay({ setApiResponse, apiKey }) {
             setApiResponse("Error initializing inference worker");
         }
     };
-
+    
     return (
         <div style={styles.container}>
             <h2 style={styles.title}>Camera Display</h2>
@@ -124,11 +130,30 @@ function CameraDisplay({ setApiResponse, apiKey }) {
 
             <div style={styles.buttonContainer}>
                 {capturedImage ? (
-                    <button style={styles.button} onClick={retakePicture}>Retake Picture</button>
+                    <button
+                        style={hoveredButton === 'retake' ? { ...styles.button, ...styles.buttonHover } : styles.button}
+                        onMouseEnter={() => setHoveredButton('retake')}
+                        onMouseLeave={() => setHoveredButton(null)}
+                        onClick={retakePicture}
+                    >
+                        Retake Picture
+                    </button>
                 ) : (
-                    <button style={styles.button} onClick={captureSquare}>Capture Picture</button>
+                    <button
+                        style={hoveredButton === 'capture' ? { ...styles.button, ...styles.buttonHover } : styles.button}
+                        onMouseEnter={() => setHoveredButton('capture')}
+                        onMouseLeave={() => setHoveredButton(null)}
+                        onClick={captureSquare}
+                    >
+                        Capture 📷
+                    </button>
                 )}
-                <button style={{ ...styles.button, marginLeft: '10px' }} onClick={handleSubmit}>
+                <button
+                    style={hoveredButton === 'submit' ? { ...styles.button, ...styles.buttonHover } : styles.button}
+                    onMouseEnter={() => setHoveredButton('submit')}
+                    onMouseLeave={() => setHoveredButton(null)}
+                    onClick={handleSubmit}
+                >
                     Submit
                 </button>
             </div>
@@ -149,25 +174,33 @@ const styles = {
         alignItems: 'center',
         padding: '20px',
         borderRadius: '8px',
+        backgroundColor: '#f1f0eb',
     },
     title: {
-        fontSize: '24px',
-        fontWeight: 'bold',
-        color: '#333',
-        fontFamily: 'Arial, sans-serif',
+        fontSize: '32px',               
+        fontWeight: '700',              
+        color: '#4B382A',                
+        fontFamily: '"Playfair Display", serif', 
+        textAlign: 'center',            
+        marginBottom: '20px',            
+        letterSpacing: '1px',            
+        lineHeight: '1.3',               
     },
+
     imageWrapper: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
         height: '100%',
+
     },
     capturedImage: {
         maxWidth: '100%',
         maxHeight: '100%',
+        position:'center',
         borderRadius: '4px',
-        objectFit: 'cover', // Ensures the image scales proportionally and fills its container
+        // objectFit: 'cover',
     },
     video: {
         width: '100%',
@@ -188,17 +221,22 @@ const styles = {
         marginTop: '10px',
         display: 'flex',
         justifyContent: 'center',
+        gap: '10px',
     },
     button: {
         padding: '10px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-        borderRadius: '4px',
+        backgroundColor: 'transparent',
+        color: 'black',
+        border: '2px solid black',
+        borderRadius: '20px',
         cursor: 'pointer',
-        transition: 'background-color 0.3s ease',
-        fontFamily: 'Arial, sans-serif',
-    }
+        transition: 'background-color 0.3s ease, color 0.3s ease', // Smooth transition for color changes
+        fontFamily: '"Playfair Display", serif',
+    },
+    buttonHover: {
+        backgroundColor: '#4B382A',
+        color: 'white',
+    },
 };
 
 
